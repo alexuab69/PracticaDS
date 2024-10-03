@@ -8,4 +8,5 @@ public final class Actions {
   // possible actions in door requests
   public static final String OPEN = "open";
   public static final String CLOSE = "close";
+  public static final String YIPIE = "close";
 }
