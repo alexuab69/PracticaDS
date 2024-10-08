@@ -37,6 +37,9 @@ public final class DirectoryUsers {
     // all actions
     // all spaces
     users.add(new User("Ana", "11343"));
+
+    // does actions in the back-end, not a user. All actions
+    users.add(new User("System", "00000"));
   }
 
   public static User findUserByCredential(String credential) {

@@ -14,7 +14,7 @@ public class Door {
   private boolean closed; // physically
   private boolean locked; // the door cannot be opened until unlock
   private boolean propped; // the door is open and should be closed
-  private boolean unlocked_shortly; // the door will be locked shortly
+  private boolean unlockedShortly; // the door will be locked shortly
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
   public Door(String id) {
@@ -22,7 +22,7 @@ public class Door {
     closed = true;
     locked = false;
     propped = false;
-    unlocked_shortly = false;
+    unlockedShortly = false;
   }
 
   public void processRequest(RequestReader request) {
@@ -59,7 +59,7 @@ public class Door {
             if (propped) {
               propped = false;
               System.out.println("Closing door " + id + " that was propped");
-              new RequestReader("", Actions.LOCK, LocalDateTime.now(), id).process();
+              new RequestReader("00000", Actions.LOCK, LocalDateTime.now(), id).process();
             }
             closed = true;
           }
@@ -70,6 +70,7 @@ public class Door {
             System.out.println("Can't lock door " + id + " because it's already locked");
           } else {
             locked = true;
+            unlockedShortly = false;
           }
         } else {
           System.out.println("Can't lock door " + id + " because it's already open. Set state to propped");
@@ -87,9 +88,10 @@ public class Door {
         System.out.println("Unlocking door " + id + " shortly");
         if (locked) {
           locked = false;
+          unlockedShortly = true;
           scheduler.schedule(() -> {
             System.out.println("Locking door " + id + " after 10 seconds");
-            new RequestReader("", Actions.LOCK, LocalDateTime.now(), id).process();
+            new RequestReader("00000", Actions.LOCK, LocalDateTime.now(), id).process();
           }, 10, TimeUnit.SECONDS);
         } else {
           System.out.println("Can't unlock door " + id + " because it's already unlocked");
@@ -117,7 +119,7 @@ public class Door {
     if (propped) {
       return "propped";
     } else {
-      if (unlocked_shortly) {
+      if (unlockedShortly) {
         return "unlocked_shortly";
       } else {
         if (locked) {
