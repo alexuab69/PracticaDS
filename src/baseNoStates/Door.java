@@ -3,14 +3,26 @@ package baseNoStates;
 import baseNoStates.requests.RequestReader;
 import org.json.JSONObject;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.time.LocalDateTime;
+
 
 public class Door {
   private final String id;
   private boolean closed; // physically
+  private boolean locked; // the door cannot be opened until unlock
+  private boolean propped; // the door is open and should be closed
+  private boolean unlocked_shortly; // the door will be locked shortly
+  private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
   public Door(String id) {
     this.id = id;
     closed = true;
+    locked = false;
+    propped = false;
+    unlocked_shortly = false;
   }
 
   public void processRequest(RequestReader request) {
@@ -28,28 +40,60 @@ public class Door {
   private void doAction(String action) {
     switch (action) {
       case Actions.OPEN:
-        if (closed) {
-          closed = false;
-        } else {
-          System.out.println("Can't open door " + id + " because it's already open");
-        }
+        if (locked) {
+          System.out.println("Can't open door " + id + " because it's locked");
+        } else
+          if (closed) {
+            closed = false;
+          } else {
+            System.out.println("Can't open door " + id + " because it's already open");
+          }
         break;
       case Actions.CLOSE:
-        if (closed) {
-          System.out.println("Can't close door " + id + " because it's already closed");
-        } else {
-          closed = true;
-        }
+        if (locked) {
+          System.out.println("Can't close door " + id + " because it's locked and closed");
+        } else
+          if (closed) {
+            System.out.println("Can't close door " + id + " because it's already closed");
+          } else {
+            if (propped) {
+              propped = false;
+              System.out.println("Closing door " + id + " that was propped");
+              new RequestReader("", Actions.LOCK, LocalDateTime.now(), id).process();
+            }
+            closed = true;
+          }
         break;
       case Actions.LOCK:
-        // TODO
-        // fall through
+        if (closed) {
+          if (locked) {
+            System.out.println("Can't lock door " + id + " because it's already locked");
+          } else {
+            locked = true;
+          }
+        } else {
+          System.out.println("Can't lock door " + id + " because it's already open. Set state to propped");
+          propped = true;
+        }
+        break;
       case Actions.UNLOCK:
-        // TODO
-        // fall through
+        if (locked) {
+          locked = false;
+        } else {
+          System.out.println("Can't unlock door " + id + " because it's already unlocked");
+        }
+        break;
       case Actions.UNLOCK_SHORTLY:
-        // TODO
-        System.out.println("Action " + action + " not implemented yet");
+        System.out.println("Unlocking door " + id + " shortly");
+        if (locked) {
+          locked = false;
+          scheduler.schedule(() -> {
+            System.out.println("Locking door " + id + " after 10 seconds");
+            new RequestReader("", Actions.LOCK, LocalDateTime.now(), id).process();
+          }, 10, TimeUnit.SECONDS);
+        } else {
+          System.out.println("Can't unlock door " + id + " because it's already unlocked");
+        }
         break;
       default:
         assert false : "Unknown action " + action;
@@ -61,12 +105,28 @@ public class Door {
     return closed;
   }
 
+  public boolean isLocked() {
+    return locked;
+  }
+
   public String getId() {
     return id;
   }
 
   public String getStateName() {
-    return "unlocked";
+    if (propped) {
+      return "propped";
+    } else {
+      if (unlocked_shortly) {
+        return "unlocked_shortly";
+      } else {
+        if (locked) {
+          return "locked";
+        } else {
+          return "unlocked";
+        }
+      }
+    }
   }
 
   @Override
