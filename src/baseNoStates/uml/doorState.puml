@@ -4,59 +4,71 @@ skinparam classAttributeIconSize 0
 
 
 class Door {
-- id : String
-- closed : boolean
-+ Door(id : String)
-+ processRequest(request : RequestReader)
-+ setState(doorState : DoorState)
-+ toJson() : JSONObject
-'+ toString() : String
-'+ isClosed() :boolean
-'+ setClosed(b : boolean)
-'+ getStateName() : String
-- doAction(action : String)
+    - id : String
+    - closed : boolean
+    + Door(id : String)
+    + processRequest(request : RequestReader)
+    + setState(doorState : DoorState)
+    + toJson() : JSONObject
+    '+ toString() : String
+    '+ isClosed() :boolean
+    '+ setClosed(b : boolean)
+    '+ getStateName() : String
+    - doAction(action : String)
 }
 
 package "DoorStates" {
     abstract class DoorState {
-    # door : Door
-    # name : String
-    + DoorState(door : Door)
-    + open()
-    + close()
-    + lock()
-    + unlock()
+        # door : Door
+        # name : String
+        + DoorState(door : Door)
+        + open()
+        + close()
+        + lock()
+        + unlock()
     }
 
     class States {
-    + {static} LOCKED : String
-    + {static} UNLOCKED : String
+        + {static} LOCKED : String
+        + {static} UNLOCKED : String
     }
 
     class Actions {
-    + {static} OPEN : String
-    + {static} CLOSE : String
-    + {static} LOCK : String
-    + {static} UNLOCK : String
+        + {static} OPEN : String
+        + {static} CLOSE : String
+        + {static} LOCK : String
+        + {static} UNLOCK : String
     }
 
     class Unlocked {
-    + Unlocked(door : Door)
-    + open()
-    + close()
-    + lock()
-    + unlock()
+        + Unlocked(door : Door)
+        + open()
+        + close()
+        + lock()
+        + unlock()
+        + unlockShortly()
     }
 
     class Locked {
-    + Locked(door : Door)
-    + open()
-    + close()
-    + lock()
-    + unlock()
+        + Locked(door : Door)
+        + open()
+        + close()
+        + lock()
+        + unlock()
+        + unlockShortly()
+    }
+
+    class UnlockedShortly {
+        + Locked(door : Door)
+        + open()
+        + close()
+        + lock()
+        + unlock()
+        + unlockShortly()
     }
 
     DoorState <|-- Unlocked
+    DoorState <|-- UnlockedShortly
     DoorState <|-- Locked
 }
 
