@@ -1,6 +1,6 @@
-package baseNoStates;
+package baseNoStates.DoorStates;
 
-public final class Actions {
+public class Actions {
   // possible actions in reader and area requests
   public static final String LOCK = "lock";
   public static final String UNLOCK = "unlock";

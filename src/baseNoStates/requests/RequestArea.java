@@ -1,6 +1,7 @@
 package baseNoStates.requests;
 
-import baseNoStates.Actions;
+import baseNoStates.DoorStates.Actions;
+import baseNoStates.DoorStates.Unlocked;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

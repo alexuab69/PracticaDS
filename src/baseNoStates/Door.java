@@ -1,6 +1,10 @@
 package baseNoStates;
 
+import baseNoStates.DoorStates.Actions;
+import baseNoStates.DoorStates.DoorState;
+import baseNoStates.DoorStates.Unlocked;
 import baseNoStates.requests.RequestReader;
+import baseNoStates.DoorStates.State;
 import org.json.JSONObject;
 
 import java.util.concurrent.Executors;
@@ -11,18 +15,12 @@ import java.time.LocalDateTime;
 
 public class Door {
   private final String id;
-  private boolean closed; // physically
-  private boolean locked; // the door cannot be opened until unlock
-  private boolean propped; // the door is open and should be closed
-  private boolean unlockedShortly; // the door will be locked shortly
+  private DoorState state;
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
   public Door(String id) {
     this.id = id;
-    closed = true;
-    locked = false;
-    propped = false;
-    unlockedShortly = false;
+    state = new Unlocked(this);
   }
 
   public void processRequest(RequestReader request) {
@@ -40,62 +38,24 @@ public class Door {
   private void doAction(String action) {
     switch (action) {
       case Actions.OPEN:
-        if (locked) {
-          System.out.println("Can't open door " + id + " because it's locked");
-        } else
-          if (closed) {
-            closed = false;
-          } else {
-            System.out.println("Can't open door " + id + " because it's already open");
-          }
+        state.open();
         break;
       case Actions.CLOSE:
-        if (locked) {
-          System.out.println("Can't close door " + id + " because it's locked and closed");
-        } else
-          if (closed) {
-            System.out.println("Can't close door " + id + " because it's already closed");
-          } else {
-            if (propped) {
-              propped = false;
-              System.out.println("Closing door " + id + " that was propped");
-              new RequestReader("00000", Actions.LOCK, LocalDateTime.now(), id).process();
-            }
-            closed = true;
-          }
+        state.close();
         break;
       case Actions.LOCK:
-        if (closed) {
-          if (locked) {
-            System.out.println("Can't lock door " + id + " because it's already locked");
-          } else {
-            locked = true;
-            unlockedShortly = false;
-          }
-        } else {
-          System.out.println("Can't lock door " + id + " because it's already open. Set state to propped");
-          propped = true;
-        }
+        state.lock();
         break;
       case Actions.UNLOCK:
-        if (locked) {
-          locked = false;
-        } else {
-          System.out.println("Can't unlock door " + id + " because it's already unlocked");
-        }
+        state.unlock();
         break;
       case Actions.UNLOCK_SHORTLY:
         System.out.println("Unlocking door " + id + " shortly");
-        if (locked) {
-          locked = false;
-          unlockedShortly = true;
-          scheduler.schedule(() -> {
-            System.out.println("Locking door " + id + " after 10 seconds");
-            new RequestReader("00000", Actions.LOCK, LocalDateTime.now(), id).process();
-          }, 10, TimeUnit.SECONDS);
-        } else {
-          System.out.println("Can't unlock door " + id + " because it's already unlocked");
-        }
+        state.unlock();
+        scheduler.schedule(() -> {
+          System.out.println("Locking door " + id + " after 10 seconds");
+          state.lock();
+        }, 10, TimeUnit.SECONDS);
         break;
       default:
         assert false : "Unknown action " + action;
@@ -104,7 +64,7 @@ public class Door {
   }
 
   public boolean isClosed() {
-    return closed;
+    return state.getStateName().equals(State.CLOSED);
   }
 
   public boolean isLocked() {
