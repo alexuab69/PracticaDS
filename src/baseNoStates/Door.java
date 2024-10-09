@@ -9,10 +9,9 @@ import org.json.JSONObject;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.Observable;
 
 
-public class Door extends Observable {
+public class Door {
   private final String id;
   private DoorState state;
   private boolean closed;
@@ -20,11 +19,16 @@ public class Door extends Observable {
 
   public Door(String id) {
     this.id = id;
+    this.state = new Unlocked(this, State.UNLOCKED);
     closed = true;
   }
 
   public void setClosed(boolean closed) {
     this.closed = closed;
+  }
+
+  public void setState(DoorState state) {
+    this.state = state;
   }
 
   public boolean isClosed() {return closed;}
@@ -35,11 +39,33 @@ public class Door extends Observable {
     // its state, and if closed or open
     if (request.isAuthorized()) {
       String action = request.getAction();
-      notifyObservers(action);
+      doAction(action);
     } else {
       System.out.println("not authorized");
     }
     request.setDoorStateName(getStateName());
+  }
+
+  private void doAction(String action) {
+    switch (action) {
+      case Actions.OPEN:
+        state.open();
+        break;
+      case Actions.CLOSE:
+        state.close();
+        break;
+      case Actions.LOCK:
+        state.lock();
+        break;
+      case Actions.UNLOCK:
+        state.unlock();
+        break;
+      case Actions.UNLOCK_SHORTLY:
+        state.unlock_shortly();
+        break;
+      default:
+        System.out.println("action not recognized");
+    }
   }
 
   public String getStateName() {

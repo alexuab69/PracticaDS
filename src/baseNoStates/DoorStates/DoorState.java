@@ -10,28 +10,6 @@ public abstract class DoorState {
     this.door = door;
     this.name = name;
   }
-  public void update(String action) {
-    switch (action) {
-      case Actions.OPEN:
-        open();
-        break;
-      case Actions.CLOSE:
-        close();
-        break;
-      case Actions.LOCK:
-        lock();
-        break;
-      case Actions.UNLOCK:
-        unlock();
-        break;
-      case Actions.UNLOCK_SHORTLY:
-        unlock_shortly();
-        break;
-      default:
-        assert false : "Unknown action " + action;
-        System.exit(-1);
-    }
-  }
 
   public String getDoorStateName() {return name;}
 

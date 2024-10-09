@@ -33,8 +33,13 @@ public class Unlocked extends DoorState{
   @Override
   public void lock() {
     // if door is unlocked, you can lock it
-    door.setState(new Locked(door, State.LOCKED));
-    System.out.println("Door locked");
+    // if door is open, can't lock it
+    if (!door.isClosed()) {
+      System.out.println("Door is open, you can't lock it until it's closed");
+    } else {
+      door.setState(new Locked(door, State.LOCKED));
+      System.out.println("Door locked");
+    }
   }
 
   @Override
