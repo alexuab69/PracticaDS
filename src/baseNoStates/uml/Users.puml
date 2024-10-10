@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+class User {
+}
+class DirectoryUsers {
+}
+class UserGroup {
+}
+class DirectoryUserGroups {
+}
+
+@enduml

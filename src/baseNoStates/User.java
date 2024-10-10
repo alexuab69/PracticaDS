@@ -13,7 +13,6 @@ public class User {
     return credential;
   }
 
-  @Override
   public String toString() {
     return "User{name=" + name + ", credential=" + credential + "}";
   }
