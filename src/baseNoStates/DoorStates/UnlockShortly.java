@@ -35,7 +35,7 @@ public class UnlockShortly extends DoorState {
     // if door is open, then is propped
     if (!door.isClosed()) {
       System.out.println("After 10 seconds, the door still open. Set the door as propped");
-      this.name = State.PROPPED;
+      door.setState(new Propped(door, State.PROPPED));
     } else {
       // if door is unlocked shortly, you can lock it
       door.setState(new Locked(door, State.LOCKED));
