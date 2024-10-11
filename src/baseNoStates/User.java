@@ -3,10 +3,17 @@ package baseNoStates;
 public class User {
   private final String name;
   private final String credential;
+  private String role = "Any_privilege";
 
   public User(String name, String credential) {
     this.name = name;
     this.credential = credential;
+  }
+
+  public User(String name, String credential, String role) {
+    this.name = name;
+    this.credential = credential;
+    this.role = role;
   }
 
   public String getCredential() {
@@ -14,6 +21,7 @@ public class User {
   }
 
   public String toString() {
-    return "User{name=" + name + ", credential=" + credential + "}";
+    return "User{name=" + name + ", credential=" + credential + ", role=" + role + "}";
   }
+
 }
