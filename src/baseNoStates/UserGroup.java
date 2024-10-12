@@ -1,8 +1,7 @@
 package baseNoStates;
 
-import baseNoStates.DoorStates.DoorState;
 import java.util.ArrayList;
-import java.util.Arrays;
+
 
 public class UserGroup {
   private static ArrayList<User> users = new ArrayList<>();
@@ -12,8 +11,8 @@ public class UserGroup {
     this.role = name;
   }
 
-  public void setUsers(User[] usersArray) {
-    users = new ArrayList<>(Arrays.asList(usersArray));
+  public void setUsers(User user) {
+    users.add(user);
   }
 
   public String getRole() {
