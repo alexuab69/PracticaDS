@@ -9,7 +9,7 @@ public final class DirectoryUserGroups extends UserGroup {
   private static final ArrayList<UserGroup> userGroups = new ArrayList<>();
   private final String FILE_NAME_USERS = "user_roles.txt";
 
-  public void makeUserGroups(String filePath) {
+  public static void makeUserGroups(String filePath) {
 
     String line;
     try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
