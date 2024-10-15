@@ -1,13 +1,11 @@
 package baseNoStates;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
 public final class DirectoryUserGroups extends UserGroup {
   private static final ArrayList<UserGroup> userGroups = new ArrayList<>();
-  private final String FILE_NAME_USERS = "user_roles.txt";
 
   public static void makeUserGroups(String filePath) {
 
