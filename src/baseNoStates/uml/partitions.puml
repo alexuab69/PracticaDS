@@ -1,0 +1,45 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam classAttributeIconSize 0
+
+abstract class Area {
+
+}
+
+class Space {
+
+}
+
+class Partition {
+
+}
+
+class Door {
+    - id : String
+    - closed : boolean
+    + Door(id : String)
+    + processRequest(request : RequestReader)
+    + setState(doorState : DoorState)
+    + toJson() : JSONObject
+    '+ toString() : String
+    '+ isClosed() :boolean
+    '+ setClosed(b : boolean)
+    '+ getStateName() : String
+    - doAction(action : String)
+}
+
+class DirectoryAreas {
+    - {static} doors : Door[]
+    + {static} makeAreas()
+    + {static} findAreaById(id : String
+    + {static} findDoorById(id : String
+    + {static} getAllDoors() : Door[]
+}
+
+Area "1" <-- DirectoryAreas : "rootArea"
+Area <|-- Partition
+Area <|-- Space
+Area <|-- Door
+Partition *--> "1" Area : "children"
+
+@enduml
