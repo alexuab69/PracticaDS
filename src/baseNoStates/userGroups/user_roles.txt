@@ -1,5 +1,5 @@
-Bernat 12345 No_privilege
-Blai 77532 No_privilege
+Bernat 12345 Blank
+Blai 77532 Blank
 Ernest 74984 Employee
 Eulalia 43295 Employee
 Manel 95783 Manager

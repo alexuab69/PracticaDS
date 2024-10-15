@@ -1,10 +1,11 @@
 package baseNoStates.requests;
 
 import baseNoStates.Door;
-import baseNoStates.User;
+import baseNoStates.userGroups.DirectoryUserGroups;
+import baseNoStates.userGroups.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-
+import baseNoStates.userGroups.DirectoryUserGroups;
 import baseNoStates.partitions.DirectoryAreas;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -96,7 +97,15 @@ public class RequestReader implements Request {
     } else {
       //TODO: get the who, where, when and what in order to decide, and if not
       // authorized add the reason(s)
-      authorized = true;
+
+      authorized = authorized = user.canSendRequests(now)
+          //Who
+          // when : date, time and weekday
+          && user.canBeInSpace(door.getFromSpace())
+          && user.canBeInSpace(door.getToSpace())
+          // where
+          && user.canDoAction(action);
+          // what
     }
   }
 }
