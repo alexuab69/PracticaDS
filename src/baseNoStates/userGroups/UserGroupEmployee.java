@@ -1,17 +1,21 @@
 package baseNoStates.userGroups;
 
-import baseNoStates.partitions.Area;
-
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import baseNoStates.partitions.Area;
 
 public class UserGroupEmployee extends UserGroup{
+
+  public UserGroupEmployee(String role) {
+    super(role);
+  }
+
   @Override
   public boolean canSendRequests(LocalDateTime now) {
-    // Sep. 1 this year
+    // Sept 1 2024
     LocalDateTime firstDate = LocalDateTime.of(now.getYear(), 9, 1, 0, 0);
 
-    // Mar. 1 next year
+    // Mar 1 2025
     LocalDateTime finalDate = LocalDateTime.of(now.plusYears(1).getYear(), 3, 1, 0, 0);
 
     // Comprobar si 'now' está en días de lunes a viernes
@@ -27,11 +31,9 @@ public class UserGroupEmployee extends UserGroup{
         now.isBefore(finalDate) && weekDay && workingHours;
   }
   @Override
-  public boolean canBeInSpace(Area area) {
-    return area.getId().equals("parking");
-  }
-  @Override
-  public boolean canDoAction(String action) {
-    return action.equals("unlock_shortly");
+  public boolean canBeInSpaceAndDoAction(Area toSpace, String action) {
+    return (action.equals("unlock_shortly") && toSpace.getId().equals("parking"))
+        || action.equals("open")
+        || action.equals("close");
   }
 }

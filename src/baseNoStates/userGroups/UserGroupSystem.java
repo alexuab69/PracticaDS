@@ -5,16 +5,16 @@ import baseNoStates.partitions.Area;
 import java.time.LocalDateTime;
 
 public class UserGroupSystem extends UserGroup {
+  public UserGroupSystem(String role) {
+    super(role);
+  }
+
   @Override
   public boolean canSendRequests(LocalDateTime now) {
     return true;
   }
   @Override
-  public boolean canBeInSpace(Area area) {
-    return true;
-  }
-  @Override
-  public boolean canDoAction(String action) {
-    return true;
+  public boolean canBeInSpaceAndDoAction(Area toSpace, String action) {
+    return false;
   }
 }

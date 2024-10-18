@@ -2,6 +2,7 @@ package baseNoStates.requests;
 
 import baseNoStates.Door;
 import baseNoStates.User;
+import baseNoStates.userGroups.UserGroup;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -95,9 +96,9 @@ public class RequestReader implements Request {
       authorized = false;
       addReason("user doesn't exists");
     } else {
-      //TODO: get the who, where, when and what in order to decide, and if not
-      // authorized add the reason(s)
-      authorized = true;
+      UserGroup userGroup = user.getUserGroup();
+      authorized = userGroup.canSendRequests(now) // when
+          && userGroup.canBeInSpaceAndDoAction(door.getToSpace(), action); // where and what
     }
   }
 }

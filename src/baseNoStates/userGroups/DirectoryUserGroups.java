@@ -1,41 +1,54 @@
 package baseNoStates.userGroups;
 
 
-import java.util.HashMap;
+import baseNoStates.User;
+
+import java.util.ArrayList;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public final class DirectoryUserGroups extends UserGroup {
-  private static final HashMap<String, UserGroup> userGroups = new HashMap<>();
+public final class DirectoryUserGroups {
+  private static final ArrayList<UserGroup> userGroups = new ArrayList<>();
 
-  public void makeUserGroups(String filePath) {
+  public static void makeUserGroups() {
+    // 1. Create the UserGroups
+    UserGroup userGroupBlank = new UserGroupBlank("blank");
+    UserGroup userGroupEmployee = new UserGroupEmployee("employee");
+    UserGroup userGroupManager = new UserGroupManager("manager");
+    UserGroup userGroupAdministrator = new UserGroupAdministrator("administrator");
+    UserGroup userGroupSystem = new UserGroupSystem("system");
 
-    String line;
-    try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-      while ((line = reader.readLine()) != null) {
-        String[] parts = line.split(" ");
-        if(parts.length == 3) {
-          String name = parts[0];
-          String credential = parts[1];
-          String role = parts[2];
+    // 2. Add the UserGroups to the ArrayList
+    userGroups.add(userGroupBlank);
+    userGroups.add(userGroupEmployee);
+    userGroups.add(userGroupManager);
+    userGroups.add(userGroupAdministrator);
+    userGroups.add(userGroupSystem);
 
-          // Find or create a UserGroup for this role
-          UserGroup userGroup = findOrCreateUserGroup(role);
+    // 3. Create the users and tell them to which UserGroup they belong
+    User user1 = new User("Bernat","12345", userGroupBlank);
+    User user2 = new User("Blai","77532", userGroupBlank);
+    User user3 = new User("Ernest","74984", userGroupEmployee);
+    User user4 = new User("Eulalia","43295", userGroupEmployee);
+    User user5 = new User("Manel","95783", userGroupManager);
+    User user6 = new User("Marta","05827", userGroupManager);
+    User user7 = new User("Ana","11343", userGroupAdministrator);
+    User user8 = new User("System","00000", userGroupSystem);
 
-          User user = new User(name,credential, userGroup);
-
-          // Add the user to the corresponding UserGroup
-          userGroup.setUsers(user);
-
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    // 4. Add the users to each UserGroup
+    userGroupBlank.setUsers(user1);
+    userGroupBlank.setUsers(user2);
+    userGroupEmployee.setUsers(user3);
+    userGroupEmployee.setUsers(user4);
+    userGroupManager.setUsers(user5);
+    userGroupManager.setUsers(user6);
+    userGroupAdministrator.setUsers(user7);
+    userGroupSystem.setUsers(user8);
   }
 
   public static User findUserByCredential(String credential) {
-    for (UserGroup userGroup : userGroups.values()) {
+    for (UserGroup userGroup : userGroups) {
       User user = userGroup.findUserByCredential(credential);
       if (user != null) {
         return user;
@@ -43,37 +56,5 @@ public final class DirectoryUserGroups extends UserGroup {
     }
     System.out.println("user with credential " + credential + " not found");
     return null;
-  }
-
-  // Method to find a UserGroup by its role or create it if it doesn't exist
-  private static UserGroup findOrCreateUserGroup(String role) {
-    // Buscar en el HashMap si ya existe un UserGroup para el role dado
-    if (userGroups.containsKey(role)) {
-      return userGroups.get(role); // Retornar el grupo si ya existe
-    }
-    // Si no existe, crearlo y agregarlo al HashMap
-
-    UserGroup newGroup;
-
-    switch (role) {
-      case "Administrator":
-        newGroup = new UserGroupAdministrator();
-        break;
-      case "Manager":
-        newGroup = new UserGroupManager();
-        break;
-      case "Employee":
-        newGroup = new UserGroupEmployee();
-        break;
-      case "System":
-        newGroup = new UserGroupSystem();
-        break;
-      default: // Caso por defecto es para roles no reconocidos, que podrían ser 'Blank' u otro.
-        newGroup = new UserGroupBlank();
-        break;
-    }
-
-    userGroups.put(role, newGroup);
-    return newGroup;
   }
 }
