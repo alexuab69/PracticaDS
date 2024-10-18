@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam classAttributeIconSize 0
+
+class DirectoryUserGroups {
+    - userGroups : HashMap<String,UserGroup>
+    + makeUserGroups(filePath : String)
+    + findUserByCredential(credential : String) : User
+    - findOrCreateUserGroup(role : String) : UserGroup
+}
+
+class UserGroup {
+    - users : User[]
+    + setUsers()
+    + findUserByCredential(credential : String) : User
+}
+
+class User {
+    - name : String
+    - credential : String
+}
+
+class UserGroupAdministrator extends UserGroup{
+
+}
+class UserGroupBlank extends UserGroup{
+
+}
+class UserGroupEmployee extends UserGroup{
+
+}
+class UserGroupManager extends UserGroup{
+
+}
+class UserGroupSystem extends UserGroup{
+
+}
+
+DirectoryUserGroups  -->  UserGroup : userGroups
+UserGroup  -->  User : users
+@enduml

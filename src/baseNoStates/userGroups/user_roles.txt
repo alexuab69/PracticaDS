@@ -1,0 +1,8 @@
+Bernat 12345 Blank
+Blai 77532 Blank
+Ernest 74984 Employee
+Eulalia 43295 Employee
+Manel 95783 Manager
+Marta 05827 Manager
+Ana 11343 Administrator
+System 00000 System
