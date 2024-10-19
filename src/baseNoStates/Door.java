@@ -44,6 +44,7 @@ public class Door extends Area {
   public String getId() {return id;}
   public Area getFromSpace() {return fromSpace;}
   public Area getToSpace() {return toSpace;}
+  public DoorState getState() {return state;}
 
   public void processRequest(RequestReader request) {
     // it is the Door that process the request because the door has and knows

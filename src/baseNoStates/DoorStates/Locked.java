@@ -1,6 +1,10 @@
 package baseNoStates.DoorStates;
 
+import baseNoStates.Clock;
 import baseNoStates.Door;
+
+import java.time.LocalDateTime;
+import java.util.Observer;
 
 public class Locked extends DoorState{
 

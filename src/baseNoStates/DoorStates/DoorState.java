@@ -2,6 +2,8 @@ package baseNoStates.DoorStates;
 
 import baseNoStates.*;
 
+import java.time.LocalDateTime;
+
 public abstract class DoorState {
   protected Door door;
   protected String name; // Name of the state just for prints
@@ -10,7 +12,6 @@ public abstract class DoorState {
     this.door = door;
     this.name = name;
   }
-
   public String getDoorStateName() {return name;}
 
   public void open() {}
