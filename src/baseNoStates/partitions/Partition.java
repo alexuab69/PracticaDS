@@ -38,7 +38,7 @@ public class Partition extends Area {
 
   @Override
   public Object getId() {
-    return null;
+    return id;
   }
 
   public ArrayList<Space> getSpaces() {
@@ -55,15 +55,25 @@ public class Partition extends Area {
 
   @Override
   public ArrayList<Door> getDoorsGivingAccess() {
+    // Create a new ArrayList to store all doors that provide access
     ArrayList<Door> accessDoors = new ArrayList<>();
+
+    // Loop through each 'Area' object in the 'areas' collection
     for (Area area : areas) {
+      // Check if the area is an instance of 'Partition'
       if (area instanceof Partition partition) {
+        // If it's a Partition, recursively get the doors from the partition
         accessDoors.addAll(partition.getDoorsGivingAccess());
+
+        // Check if the area is an instance of 'Space'
       } else if (area instanceof Space space) {
+        // If it's a Space, get the doors directly from the space
         accessDoors.addAll(space.getDoors());
       }
     }
+    // Return the list of doors that provide access
     return accessDoors;
   }
+
 
 }

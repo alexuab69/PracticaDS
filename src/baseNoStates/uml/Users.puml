@@ -1,18 +1,29 @@
-@startuml
+ @startuml
 'https://plantuml.com/sequence-diagram
 skinparam classAttributeIconSize 0
 
 class DirectoryUserGroups {
-    - userGroups : HashMap<String,UserGroup>
-    + makeUserGroups(filePath : String)
+    - userGroups : ArrayList<UserGroup>
+    + makeUserGroups()
     + findUserByCredential(credential : String) : User
     - findOrCreateUserGroup(role : String) : UserGroup
 }
 
 class UserGroup {
-    - users : User[]
-    + setUsers()
+    - role : String
+    - startDate : LocalDateTime
+    - endDate : LocalDateTime
+    - workingDays : EnumSet<DayOfWeek>
+    - startHour : int
+    - endHour : int
+    + setUsers(user : User)
+    + setWorkingHours(startHour : int, endHour : int)
+    + setWorkingDays(workingDays : EnumSet<DayOfWeek>)
+    + setDateRange(startDate : LocalDateTime, endDate : LocalDateTime)
     + findUserByCredential(credential : String) : User
+    + getRole() : String
+    + canSendRequests(now : LocalDateTime) : boolean
+    + canBeInSpaceAndDoAction(toSpace : Area,action : String) : boolean
 }
 
 class User {

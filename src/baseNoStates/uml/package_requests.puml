@@ -10,10 +10,10 @@ package requests {
     }
 
     class RequestRefresh implements Request {
-    - jsonDoors : JSONObject[]
+    - jsonDoors : ArrayList<JSONObject>
     + answerToJson() : JSONObject
-    + process()
     + toString() : String
+    + process()
     }
 
     class RequestReader implements Request {
@@ -23,15 +23,16 @@ package requests {
     - doorId : String
     - userName : String
     - authorized : boolean
-    - reasons : String[]
+    - reasons : ArrayList<String>
     - doorStateName : String
+    - closed : boolean
     + answerToJson() : JSONObject
     + process()
-    - authorize(user : User, door : Door)
     + toString() : String
     + setDoorStateName(name : String)
     + getAction() : String
     + isAuthorized() : boolean
+    - authorize(user : User, door : Door)
     }
 
     class RequestArea implements Request {
@@ -39,7 +40,7 @@ package requests {
     - action : String
     - now : LocalDateTime
     - areaId : String
-    - requestsReader : RequestReader[]
+    - requestsReader : ArrayList<RequestReader>
     + answerToJson() : JSONObject
     + process()
     + getAction() : String

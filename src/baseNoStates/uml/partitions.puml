@@ -3,14 +3,19 @@
 skinparam classAttributeIconSize 0
 
 abstract class Area {
-
+    + {abstract} createBuilding(areas : Area...)
+    + {abstract} findAreaById(id : String) : Area
+    + {abstract} createBuilding(partition : Partition)
+    + {abstract} getDoorsGivingAccess() : ArrayList<Door>
 }
 
 class Space {
-
+    - id : String
+    + createBuilding
 }
 
 class Partition {
+    - id : String
 
 }
 
@@ -29,11 +34,12 @@ class Door {
 }
 
 class DirectoryAreas {
-    - {static} doors : Door[]
     + {static} makeAreas()
-    + {static} findAreaById(id : String
-    + {static} findDoorById(id : String
-    + {static} getAllDoors() : Door[]
+    + {static} tellDoorsWhichSpacesTheyConnect()
+    + {static} initializeDoors() : ArrayList<Door>
+    + {static} findAreaById(id : String) : Area
+    + {static} findDoorById(id : String) : Door
+    + {static} getAllDoors() : ArrayList<Door>
 }
 
 Area "1" <-- DirectoryAreas : "rootArea"
@@ -41,5 +47,7 @@ Area <|-- Partition
 Area <|-- Space
 Area <|-- Door
 Partition *--> "1" Area : "children"
+Door  <--  Space : doors
+Door  <--  DirectoryAreas : doors
 
 @enduml

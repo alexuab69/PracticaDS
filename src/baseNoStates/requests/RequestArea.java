@@ -2,7 +2,6 @@ package baseNoStates.requests;
 
 import baseNoStates.Door;
 import baseNoStates.DoorStates.Actions;
-import baseNoStates.DoorStates.Unlocked;
 import baseNoStates.partitions.Area;
 import baseNoStates.partitions.DirectoryAreas;
 import org.json.JSONArray;
@@ -35,34 +34,51 @@ public class RequestArea implements Request {
 
   @Override
   public JSONObject answerToJson() {
+    // Create a new JSONObject to store the response
     JSONObject json = new JSONObject();
     json.put("action", action);
     json.put("areaId", areaId);
+
+    // Create a new JSONArray to hold the requests as JSON objects
     JSONArray jsonRequests = new JSONArray();
+
+    // Loop through the requests list and add each request as a JSON object
     for (RequestReader rd : requests) {
+      // Assuming each RequestReader has an answerToJson() method that returns a JSONObject
       jsonRequests.put(rd.answerToJson());
     }
+
+    // Add the JSONArray of requests to the main JSON object
     json.put("requestsDoors", jsonRequests);
+
+    // Add a placeholder field for future implementation
     json.put("todo", "request areas not yet implemented");
     return json;
   }
 
   @Override
   public String toString() {
+    // Declare a string to hold the string representation of requests
     String requestsDoorsStr;
-    if (requests.size() == 0) {
+    // Check if there are any requests in the list
+    if (requests.isEmpty()) {
+      // If no requests, set an empty string
       requestsDoorsStr = "";
     } else {
+      // Otherwise, convert the requests list to string
       requestsDoorsStr = requests.toString();
     }
+
+    // Return a string representing the Request object
     return "Request{"
-            + "credential=" + credential
-            + ", action=" + action
-            + ", now=" + now
-            + ", areaId=" + areaId
-            + ", requestsDoors=" + requestsDoorsStr
-            + "}";
+        + "credential=" + credential   // Include the credential field in the output
+        + ", action=" + action         // Include the action field
+        + ", now=" + now               // Include the current time or timestamp field
+        + ", areaId=" + areaId         // Include the areaId field
+        + ", requestsDoors=" + requestsDoorsStr  // Include the string representation of requests
+        + "}";
   }
+
 
   // processing the request of an area is creating the corresponding door requests and forwarding
   // them to all of its doors. For some it may be authorized and action will be done, for others
