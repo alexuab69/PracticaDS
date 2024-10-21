@@ -16,6 +16,6 @@ public class UserGroupSystem extends UserGroup {
   }
   @Override
   public boolean canBeInSpaceAndDoAction(Area toSpace, String action) {
-    return false;
+    return true;
   }
 }

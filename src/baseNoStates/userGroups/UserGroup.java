@@ -10,7 +10,7 @@ import java.util.EnumSet;
 
 public abstract class UserGroup {
   private final static ArrayList<User> users = new ArrayList<>();
-  private String role = "";
+  private final String role;
 
   // Attributes to control the date range, working days, and working hours
   private LocalDateTime startDate;
@@ -52,7 +52,6 @@ public abstract class UserGroup {
   }
 
   public String getRole() {return role;}
-  public void setRole(String role) {this.role = role;}
   public boolean canSendRequests(LocalDateTime now) {
     if (startDate == null || endDate == null) {
       return false;  // If the date range has not been set
