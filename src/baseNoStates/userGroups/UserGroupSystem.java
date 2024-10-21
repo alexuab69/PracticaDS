@@ -9,6 +9,7 @@ public class UserGroupSystem extends UserGroup {
     super(role);
   }
 
+  // does actions in the back-end, not a user. All actions
   @Override
   public boolean canSendRequests(LocalDateTime now) {
     return true;
