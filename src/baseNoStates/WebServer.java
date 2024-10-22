@@ -41,10 +41,10 @@ public class WebServer {
 
   private class SocketThread extends Thread {
     // as an inner class, SocketThread sees WebServer attributes
-    private final Socket insocked; // client connection via Socket class
+    private final Socket inSocket; // client connection via Socket class
 
     SocketThread(Socket insocket) {
-      this.insocked = insocket;
+      this.inSocket = insocket;
       this.start();
     }
 
@@ -57,9 +57,9 @@ public class WebServer {
 
       try {
         // we read characters from the client via input stream on the socket
-        in = new BufferedReader(new InputStreamReader(insocked.getInputStream()));
+        in = new BufferedReader(new InputStreamReader(inSocket.getInputStream()));
         // we get character output stream to client
-        out = new PrintWriter(insocked.getOutputStream());
+        out = new PrintWriter(inSocket.getOutputStream());
         // get first line of the request from the client
         String input = in.readLine();
         // we parse the request with a string tokenizer
@@ -104,7 +104,7 @@ public class WebServer {
 
         in.close();
         out.close();
-        insocked.close(); // we close socket connection
+        inSocket.close(); // we close socket connection
       } catch (Exception e) {
         System.err.println("Exception : " + e);
       }
