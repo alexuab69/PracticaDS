@@ -1,0 +1,248 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+
+package "BaseNoStates" {
+    class Webserver {
+    - {static} PORT :int
+    - {static} FORMATTER : DateTimeFormatter
+    + Webserver()
+    }
+
+    class SocketThread {
+    - inSocked : Socked
+    - makeRequest(tokens : String[]) : Request
+    - makeRequestReader(tokens : String[]) : RequestReader
+    - makeRequestArea(tokens : String[]) : RequestArea
+    - makeHeaderAnswer() : String
+    - makeJsonAnswer(request : Request) : String
+    + run()
+    }
+
+    class Clock extends Observable {
+    - date : LocalDateTime
+    - timer : Timer
+    - period : int
+    + start()
+    + stop()
+    + getPeriod() : int
+    + getDate() :  LocalDateTime
+    }
+
+    class Main {
+    + {static} main(args : String)
+    }
+}
+
+
+Main -[hidden]down- Webserver
+
+package "UserGroups" {
+
+    class DirectoryUserGroups {
+    - userGroups : ArrayList<UserGroup>
+    + makeUserGroups()
+    + findUserByCredential(credential : String) : User
+    - findOrCreateUserGroup(role : String) : UserGroup
+    }
+
+    class UserGroup {
+        - role : String
+        - startDate : LocalDateTime
+        - endDate : LocalDateTime
+        - workingDays : EnumSet<DayOfWeek>
+        - startHour : int
+        - endHour : int
+        + setUsers(user : User)
+        + setWorkingHours(startHour : int, endHour : int)
+        + setWorkingDays(workingDays : EnumSet<DayOfWeek>)
+        + setDateRange(startDate : LocalDateTime, endDate : LocalDateTime)
+        + findUserByCredential(credential : String) : User
+        + getRole() : String
+        + canSendRequests(now : LocalDateTime) : boolean
+        + canBeInSpaceAndDoAction(toSpace : Area,action : String) : boolean
+    }
+
+    class User {
+        - name : String
+        - credential : String
+    }
+
+    class UserGroupAdministrator extends UserGroup{
+
+    }
+    class UserGroupBlank extends UserGroup{
+
+    }
+    class UserGroupEmployee extends UserGroup{
+
+    }
+    class UserGroupManager extends UserGroup{
+
+    }
+    class UserGroupSystem extends UserGroup{
+
+    }
+}
+
+DirectoryUserGroups  -->  UserGroup : userGroups
+UserGroup  -->  User : users
+
+package "Partitions" {
+
+    abstract class Area {
+        + {abstract} createBuilding(areas : Area...)
+        + {abstract} findAreaById(id : String) : Area
+        + {abstract} createBuilding(partition : Partition)
+        + {abstract} getDoorsGivingAccess() : ArrayList<Door>
+    }
+
+    class Space {
+        - id : String
+        + createBuilding
+    }
+
+    class Partition {
+        - id : String
+
+    }
+
+    class DirectoryAreas {
+        + {static} makeAreas()
+        + {static} tellDoorsWhichSpacesTheyConnect()
+        + {static} initializeDoors() : ArrayList<Door>
+        + {static} findAreaById(id : String) : Area
+        + {static} findDoorById(id : String) : Door
+        + {static} getAllDoors() : ArrayList<Door>
+    }
+}
+
+Area "1" <-- DirectoryAreas : "rootArea"
+Area <|-- Partition
+Area <|-- Space
+Area <|-- Door
+Partition *--> "1" Area : "children"
+Door  <--  Space : doors
+Door  <--  DirectoryAreas : doors
+
+package requests {
+    interface Request {
+    + {abstract} answerToJson() : JSONObject
+    + {abstract} process()
+    + {abstract} toString() : String
+    }
+
+    class RequestRefresh implements Request {
+    - jsonDoors : ArrayList<JSONObject>
+    + answerToJson() : JSONObject
+    + toString() : String
+    + process()
+    }
+
+    class RequestReader implements Request {
+    - credential : String
+    - action : String
+    - now : LocalDateTime
+    - doorId : String
+    - userName : String
+    - authorized : boolean
+    - reasons : ArrayList<String>
+    - doorStateName : String
+    - closed : boolean
+    + answerToJson() : JSONObject
+    + process()
+    + toString() : String
+    + setDoorStateName(name : String)
+    + getAction() : String
+    + isAuthorized() : boolean
+    - authorize(user : User, door : Door)
+    }
+
+    class RequestArea implements Request {
+    - credential : String
+    - action : String
+    - now : LocalDateTime
+    - areaId : String
+    - requestsReader : ArrayList<RequestReader>
+    + answerToJson() : JSONObject
+    + process()
+    + getAction() : String
+    }
+}
+
+class Door {
+    - id : String
+    - closed : boolean
+    + Door(id : String)
+    + getFromSpace() : Area
+    + getToSpace() : Area
+    + getState() : DoorState
+    + processRequest(request : RequestReader)
+    + setState(doorState : DoorState)
+    + toJson() : JSONObject
+    + toString() : String
+    + isClosed() : boolean
+    + setClosed(b : boolean)
+    + getStateName() : String
+    - doAction(action : String)
+}
+
+package "DoorStates" {
+    abstract class DoorState {
+        # door : Door
+        # name : String
+        + DoorState(door : Door)
+        + open()
+        + close()
+        + lock()
+        + unlock()
+    }
+
+    class States {
+        + {static} LOCKED : String
+        + {static} UNLOCKED : String
+    }
+
+    class Actions {
+        + {static} OPEN : String
+        + {static} CLOSE : String
+        + {static} LOCK : String
+        + {static} UNLOCK : String
+    }
+
+    class Unlocked {
+        + Unlocked(door : Door)
+        + open()
+        + close()
+        + lock()
+        + unlock()
+        + unlockShortly()
+    }
+
+    class Locked {
+        + Locked(door : Door)
+        + open()
+        + close()
+        + lock()
+        + unlock()
+        + unlockShortly()
+    }
+
+    class UnlockedShortly {
+        + Locked(door : Door)
+        + open()
+        + close()
+        + lock()
+        + unlock()
+        + unlockShortly()
+    }
+
+    
+}
+DoorState <|-- Unlocked
+DoorState <|-- UnlockedShortly
+DoorState <|-- Locked
+
+DoorState <-- Door
+
+@enduml

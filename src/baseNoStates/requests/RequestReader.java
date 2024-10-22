@@ -98,6 +98,7 @@ public class RequestReader implements Request {
     } else {
       UserGroup userGroup = user.getUserGroup();
       authorized = userGroup.canSendRequests(now) // when
+          && userGroup.canBeInSpaceAndDoAction(door.getFromSpace(), action)
           && userGroup.canBeInSpaceAndDoAction(door.getToSpace(), action); // where and what
     }
   }
