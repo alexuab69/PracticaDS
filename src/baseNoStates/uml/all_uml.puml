@@ -2,24 +2,36 @@
 'https://plantuml.com/class-diagram
 skinparam classAttributeIconSize 0
 
-package "BaseNoStates" {
-    class Webserver {
-    - {static} PORT :int
-    - {static} FORMATTER : DateTimeFormatter
+class Webserver {
+- {static} PORT :int
+- {static} FORMATTER : DateTimeFormatter
+}
+
+class SocketThread {
+- inSocked : Socked
++ run()
+- makeRequest(tokens : String[]) : Request
+- makeRequestReader(tokens : String[]) : RequestReader
+- makeRequestArea(tokens : String[]) : RequestArea
+- makeHeaderAnswer() : String
+- makeJsonAnswer(request : Request) : String
+
+}
+package "java\util" {
+    interface Observer {
+        + update(arg0 : Observable, arg1 : Object)
     }
-
-    class SocketThread {
-    - inSocked : Socked
-    + run()
-    - makeRequest(tokens : String[]) : Request
-    - makeRequestReader(tokens : String[]) : RequestReader
-    - makeRequestArea(tokens : String[]) : RequestArea
-    - makeHeaderAnswer() : String
-    - makeJsonAnswer(request : Request) : String
-
+    abstract class Observable {
+        + addObserver(ob : Observer)
+        + delete(ob : Observer)
+        + setChanged()
+        + notifyObservers(arg0 : Observable, arg1 : Object)
     }
+    Observable -> "*" Observer : observers
 
-    class Clock extends Observable {
+}
+
+class Clock extends java\util.Observable {
     - date : LocalDateTime
     - timer : Timer
     - period : int
@@ -27,11 +39,11 @@ package "BaseNoStates" {
     + stop()
     + getPeriod() : int
     + getDate() :  LocalDateTime
-    }
+}
 
-    class Main {
-    + {static} main(args : String)
-    }
+
+class Main {
++ {static} main(args : String)
 }
 
 
@@ -46,7 +58,7 @@ package "UserGroups" {
     - findOrCreateUserGroup(role : String) : UserGroup
     }
 
-    class UserGroup {
+    abstract class UserGroup {
         - role : String
         - startDate : LocalDateTime
         - endDate : LocalDateTime
@@ -228,7 +240,7 @@ package "DoorStates" {
         + unlockShortly()
     }
 
-    class UnlockedShortly {
+    class UnlockedShortly implements java\util.Observer {
         + Locked(door : Door)
         + open()
         + close()
@@ -245,7 +257,6 @@ DoorState <|-- Locked
 
 DoorState <-- Door : state
 
-Webserver "1" *-- "1.*" SocketThread : "creates"
 
 
 @enduml
