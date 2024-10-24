@@ -6,7 +6,6 @@ package "BaseNoStates" {
     class Webserver {
     - {static} PORT :int
     - {static} FORMATTER : DateTimeFormatter
-    + Webserver()
     }
 
     class SocketThread {
@@ -124,7 +123,7 @@ Area <|-- Space
 Area <|-- Door
 Partition *--> "1" Area : "children"
 Door  <--  Space : doors
-Door  <--  DirectoryAreas : doors
+Door  <--  DirectoryAreas : allDoors
 
 package requests {
     interface Request {
@@ -244,15 +243,9 @@ DoorState <|-- Unlocked
 DoorState <|-- UnlockedShortly
 DoorState <|-- Locked
 
-DoorState <-- Door
+DoorState <-- Door : state
 
-SocketThread --> Request
-Webserver --> SocketThread
+Webserver "1" *-- "1.*" SocketThread : "creates"
 
-SocketThread --> RequestReader
-SocketThread --> RequestArea
-RequestReader --> User
-RequestReader --> UserGroup
-RequestArea --> Area
 
 @enduml

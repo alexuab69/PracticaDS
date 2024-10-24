@@ -4,19 +4,15 @@ skinparam classAttributeIconSize 0
 
 package "BaseNoStates" {
     class Webserver {
-
     }
 
     class SocketThread {
-
     }
 
     class Clock extends Observable {
-
     }
 
     class Main {
-
     }
 }
 
@@ -26,16 +22,29 @@ Main -[hidden]down- Webserver
 package "UserGroups" {
 
     class DirectoryUserGroups {
-
     }
 
     class UserGroup {
-         }
-
-    class User {
-
     }
 
+    class User {
+    }
+
+    class UserGroupAdministrator extends UserGroup{
+
+    }
+    class UserGroupBlank extends UserGroup{
+
+    }
+    class UserGroupEmployee extends UserGroup{
+
+    }
+    class UserGroupManager extends UserGroup{
+
+    }
+    class UserGroupSystem extends UserGroup{
+
+    }
 }
 
 DirectoryUserGroups  -->  UserGroup : userGroups
@@ -44,17 +53,16 @@ UserGroup  -->  User : users
 package "Partitions" {
 
     abstract class Area {
-        }
+    }
 
     class Space {
-
     }
 
     class Partition {
     }
 
     class DirectoryAreas {
-        }
+    }
 }
 
 Area "1" <-- DirectoryAreas : "rootArea"
@@ -63,7 +71,7 @@ Area <|-- Space
 Area <|-- Door
 Partition *--> "1" Area : "children"
 Door  <--  Space : doors
-Door  <--  DirectoryAreas : doors
+Door  <--  DirectoryAreas : allDoors
 
 package requests {
     interface Request {
@@ -73,7 +81,7 @@ package requests {
     }
 
     class RequestReader implements Request {
-     }
+    }
 
     class RequestArea implements Request {
     }
@@ -87,19 +95,15 @@ package "DoorStates" {
     }
 
     class States {
-
     }
 
     class Actions {
-
     }
 
     class Unlocked {
-
     }
 
     class Locked {
-
     }
 
     class UnlockedShortly {
@@ -113,13 +117,7 @@ DoorState <|-- Locked
 
 DoorState <-- Door : state
 
-SocketThread --> Request
-Webserver --> SocketThread
-SocketThread --> Request
-SocketThread --> RequestReader
-SocketThread --> RequestArea
-RequestReader --> User
-RequestReader --> UserGroup
-RequestArea --> Area
+Webserver "1" *-- "1.*" SocketThread : "creates"
+
 
 @enduml
