@@ -223,9 +223,11 @@ package "DoorStates" {
         + unlock()
     }
 
-    class States {
+    class State {
         + {static} LOCKED : String
         + {static} UNLOCKED : String
+        + {static} PROPPED : String
+        + {static} UNLOCK_SHORTLY : String
     }
 
     class Actions {
@@ -236,7 +238,6 @@ package "DoorStates" {
     }
 
     class Unlocked {
-        + Unlocked(door : Door)
         + open()
         + close()
         + lock()
@@ -245,7 +246,14 @@ package "DoorStates" {
     }
 
     class Locked {
-        + Locked(door : Door)
+        + open()
+        + close()
+        + lock()
+        + unlock()
+        + unlockShortly()
+    }
+
+    class Propped extends DoorState {
         + open()
         + close()
         + lock()
@@ -254,6 +262,7 @@ package "DoorStates" {
     }
 
     class UnlockedShortly implements java\util.Observer {
+        - now : LocalDateTime
         + Locked(door : Door)
         + open()
         + close()
@@ -262,14 +271,14 @@ package "DoorStates" {
         + unlockShortly()
     }
 
-    
+
 }
 DoorState <|-- Unlocked
 DoorState <|-- UnlockedShortly
 DoorState <|-- Locked
 
 DoorState <-- Door : state
-
+Clock <-- UnlockedShortly : timer
 
 
 @enduml
