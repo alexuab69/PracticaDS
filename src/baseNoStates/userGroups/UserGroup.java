@@ -29,7 +29,6 @@ public abstract class UserGroup {
   }
 
   public String getRole() {return role;}
-  public void setRole(String role) {this.role = role;}
   public boolean canSendRequests(LocalDateTime now) {
     return false;
   }

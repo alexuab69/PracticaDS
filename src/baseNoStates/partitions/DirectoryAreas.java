@@ -6,15 +6,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DirectoryAreas {
-  private static Area rootArea;
-  private static ArrayList<Door> allDoors;
+  private static Area rootArea;           // Root area representing the entire building structure
+  private static ArrayList<Door> allDoors; // List to store all doors in the building
 
+  // Method to initialize areas and doors in the building
   public static void makeAreas() {
-    rootArea = new Partition("building");
+    rootArea = new Partition("building"); // Initialize the root area as the main building
 
     // First, create all doors
     allDoors = initializeDoors();
 
+    // Define the building layout with partitions and spaces, each containing specific doors
     rootArea.createBuilding(
         new Partition("basement",
             new Space("parking",
@@ -49,63 +51,67 @@ public class DirectoryAreas {
         new Space("exterior")
     );
 
-    // Now, tell the doors which spaces they connect
+    // Set up door connections between spaces
     tellDoorsWhichSpacesTheyConnect();
   }
 
+  // Method to define connections for each door to its corresponding spaces
   private static void tellDoorsWhichSpacesTheyConnect() {
-    // D1
+    // D1 connects exterior to parking
     allDoors.get(0).setFromSpace(findAreaById("exterior"));
     allDoors.get(0).setToSpace(findAreaById("parking"));
-    // D2
+    // D2 connects stairs to parking
     allDoors.get(1).setFromSpace(findAreaById("stairs"));
     allDoors.get(1).setToSpace(findAreaById("parking"));
-    // D3
+    // D3 connects exterior to hall
     allDoors.get(2).setFromSpace(findAreaById("exterior"));
     allDoors.get(2).setToSpace(findAreaById("hall"));
-    // D4
+    // D4 connects stairs to hall
     allDoors.get(3).setFromSpace(findAreaById("stairs"));
     allDoors.get(3).setToSpace(findAreaById("hall"));
-    // D5
+    // D5 connects hall to room1
     allDoors.get(4).setFromSpace(findAreaById("hall"));
     allDoors.get(4).setToSpace(findAreaById("room1"));
-    // D6
+    // D6 connects hall to room2
     allDoors.get(5).setFromSpace(findAreaById("hall"));
     allDoors.get(5).setToSpace(findAreaById("room2"));
-    // D7
+    // D7 connects stairs to corridor
     allDoors.get(6).setFromSpace(findAreaById("stairs"));
     allDoors.get(6).setToSpace(findAreaById("corridor"));
-    // D8
+    // D8 connects corridor to room3
     allDoors.get(7).setFromSpace(findAreaById("corridor"));
     allDoors.get(7).setToSpace(findAreaById("room3"));
-    // D9
+    // D9 connects corridor to IT
     allDoors.get(8).setFromSpace(findAreaById("corridor"));
     allDoors.get(8).setToSpace(findAreaById("IT"));
   }
 
+  // Initialize doors and return a list of them
   private static ArrayList<Door> initializeDoors() {
     // basement
-    Door d1 = new Door("D1"); // exterior, parking
-    Door d2 = new Door("D2"); // stairs, parking
+    Door d1 = new Door("D1"); // Connects exterior to parking
+    Door d2 = new Door("D2"); // Connects stairs to parking
 
     // ground floor
-    Door d3 = new Door("D3"); // exterior, hall
-    Door d4 = new Door("D4"); // stairs, hall
-    Door d5 = new Door("D5"); // hall, room1
-    Door d6 = new Door("D6"); // hall, room2
+    Door d3 = new Door("D3"); // Connects exterior to hall
+    Door d4 = new Door("D4"); // Connects stairs to hall
+    Door d5 = new Door("D5"); // Connects hall to room1
+    Door d6 = new Door("D6"); // Connects hall to room2
 
     // first floor
-    Door d7 = new Door("D7"); // stairs, corridor
-    Door d8 = new Door("D8"); // corridor, room3
-    Door d9 = new Door("D9"); // corridor, IT
+    Door d7 = new Door("D7"); // Connects stairs to corridor
+    Door d8 = new Door("D8"); // Connects corridor to room3
+    Door d9 = new Door("D9"); // Connects corridor to IT
 
     return new ArrayList<>(Arrays.asList(d1, d2, d3, d4, d5, d6, d7, d8, d9));
   }
 
+  // Method to find an area in the building by its ID
   public static Area findAreaById(String id) {
-    return rootArea.findAreaById(id); // an Area or null if not found
+    return rootArea.findAreaById(id); // Returns an Area or null if not found
   }
 
+  // Method to find a door by its ID
   public static Door findDoorById(String id) {
     for (Door door : allDoors) {
       if (door.getId().equals(id)) {
@@ -113,9 +119,10 @@ public class DirectoryAreas {
       }
     }
     System.out.println("door with id " + id + " not found");
-    return null; // otherwise we get a Java error
+    return null; // Returns null if door is not found
   }
 
+  // Method to return all doors in the building
   public static ArrayList<Door> getAllDoors() {
     System.out.println(allDoors);
     return allDoors;

@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam classAttributeIconSize 0
+
+interface Observer {
+    + update(arg0 : Observable, arg1 : Object)
+}
+abstract class Observable {
+    + addObserver(ob : Observer)
+    + delete(ob : Observer)
+    + setChanged()
+    + notifyObservers(arg0 : Observable, arg1 : Object)
+}
+Observable -> "*" Observer : observers
+
+class Clock extends Observable {
+    - date : LocalDateTime
+    - timer : Timer
+    - period : int
+    + start()
+    + stop()
+    + getPeriod() : int
+    + getDate() :  LocalDateTime
+}
+
+@enduml

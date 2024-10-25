@@ -53,10 +53,14 @@ package "UserGroups" {
     class UserGroupSystem extends UserGroup{
 
     }
+    class schedule {
+    }
 }
 
 DirectoryUserGroups  -->  UserGroup : userGroups
 UserGroup  -->  User : users
+UserGroup --> Schedule : schedule
+
 
 package "Partitions" {
 

@@ -2,49 +2,47 @@
 'https://plantuml.com/class-diagram
 skinparam classAttributeIconSize 0
 
-package requests {
-    interface Request {
-    + {abstract} answerToJson() : JSONObject
-    + {abstract} process()
-    + {abstract} toString() : String
-    }
+interface Request {
++ {abstract} answerToJson() : JSONObject
++ {abstract} process()
++ {abstract} toString() : String
+}
 
-    class RequestRefresh implements Request {
-    - jsonDoors : ArrayList<JSONObject>
-    + answerToJson() : JSONObject
-    + toString() : String
-    + process()
-    }
+class RequestRefresh implements Request {
+- jsonDoors : ArrayList<JSONObject>
++ answerToJson() : JSONObject
++ toString() : String
++ process()
+}
 
-    class RequestReader implements Request {
-    - credential : String
-    - action : String
-    - now : LocalDateTime
-    - doorId : String
-    - userName : String
-    - authorized : boolean
-    - reasons : ArrayList<String>
-    - doorStateName : String
-    - closed : boolean
-    + answerToJson() : JSONObject
-    + process()
-    + toString() : String
-    + setDoorStateName(name : String)
-    + getAction() : String
-    + isAuthorized() : boolean
-    - authorize(user : User, door : Door)
-    }
+class RequestReader implements Request {
+- credential : String
+- action : String
+- now : LocalDateTime
+- doorId : String
+- userName : String
+- authorized : boolean
+- reasons : ArrayList<String>
+- doorStateName : String
+- closed : boolean
++ answerToJson() : JSONObject
++ process()
++ toString() : String
++ setDoorStateName(name : String)
++ getAction() : String
++ isAuthorized() : boolean
+- authorize(user : User, door : Door)
+}
 
-    class RequestArea implements Request {
-    - credential : String
-    - action : String
-    - now : LocalDateTime
-    - areaId : String
-    - requestsReader : ArrayList<RequestReader>
-    + answerToJson() : JSONObject
-    + process()
-    + getAction() : String
-    }
+class RequestArea implements Request {
+- credential : String
+- action : String
+- now : LocalDateTime
+- areaId : String
+- requestsReader : ArrayList<RequestReader>
++ answerToJson() : JSONObject
++ process()
++ getAction() : String
 }
 
 

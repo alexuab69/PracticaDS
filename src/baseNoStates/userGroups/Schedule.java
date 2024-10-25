@@ -33,11 +33,9 @@ public class Schedule {
             return false;
         }
         // Check if the day is a working day
-        if(workingDays.contains(time.getDayOfWeek())){
+        if(workingDays.contains(day)){
             // Check if the time falls within the allowed range
-            if (time.toLocalTime().isBefore(endWorkingHour) && time.toLocalTime().isAfter(startWorkingHour)) {
-                return true;
-            }
+          return localTime.isBefore(endWorkingHour) && localTime.isAfter(startWorkingHour);
         }
         return false;
     }

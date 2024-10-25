@@ -19,20 +19,6 @@ class Partition {
 
 }
 
-class Door {
-    - id : String
-    - closed : boolean
-    + Door(id : String)
-    + processRequest(request : RequestReader)
-    + setState(doorState : DoorState)
-    + toJson() : JSONObject
-    '+ toString() : String
-    '+ isClosed() :boolean
-    '+ setClosed(b : boolean)
-    '+ getStateName() : String
-    - doAction(action : String)
-}
-
 class DirectoryAreas {
     + {static} makeAreas()
     + {static} tellDoorsWhichSpacesTheyConnect()
@@ -42,12 +28,30 @@ class DirectoryAreas {
     + {static} getAllDoors() : ArrayList<Door>
 }
 
+class Door {
+    - id : String
+    - closed : boolean
+    + Door(id : String)
+    + getFromSpace() : Area
+    + getToSpace() : Area
+    + getState() : DoorState
+    + processRequest(request : RequestReader)
+    + setState(doorState : DoorState)
+    + toJson() : JSONObject
+    + toString() : String
+    + isClosed() : boolean
+    + setClosed(b : boolean)
+    + getStateName() : String
+    - doAction(action : String)
+}
+
+
 Area "1" <-- DirectoryAreas : "rootArea"
 Area <|-- Partition
 Area <|-- Space
 Area <|-- Door
 Partition *--> "1" Area : "children"
-Door  <--  Space : doors
-Door  <--  DirectoryAreas : doors
+Door  <---  Space : doors
+Door  <---  DirectoryAreas : allDoors
 
 @enduml

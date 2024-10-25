@@ -12,16 +12,17 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class RequestReader implements Request {
-  private final String credential; // who
-  private final String action;     // what
-  private final LocalDateTime now; // when
-  private final String doorId;     // where
-  private String userName;
-  private boolean authorized;
-  private final ArrayList<String> reasons; // why not authorized
-  private String doorStateName;
-  private boolean doorClosed;
+  private final String credential; // The user's unique identifier
+  private final String action;     // Action the user wants to perform (e.g., open or close a door)
+  private final LocalDateTime now; // Timestamp of the request
+  private final String doorId;     // Identifier for the door being accessed
+  private String userName;         // Name of the user making the request
+  private boolean authorized;      // Status of request authorization
+  private final ArrayList<String> reasons; // Reasons for denied authorization (if applicable)
+  private String doorStateName;    // Current state of the door
+  private boolean doorClosed;      // Whether the door is closed or not
 
+  // Constructor to initialize essential request details
   public RequestReader(String credential, String action, LocalDateTime now, String doorId) {
     this.credential = credential;
     this.action = action;
@@ -30,40 +31,45 @@ public class RequestReader implements Request {
     this.now = now;
   }
 
+  // Set the name of the door's current state
   public void setDoorStateName(String name) {
     doorStateName = name;
   }
 
+  // Retrieve the action requested by the user
   public String getAction() {
     return action;
   }
 
+  // Check if the request is authorized
   public boolean isAuthorized() {
     return authorized;
   }
 
+  // Add a reason to the list of authorization failure reasons
   public void addReason(String reason) {
     reasons.add(reason);
   }
 
-
+  // Format the request details as a string for logging or debugging
   @Override
   public String toString() {
     if (userName == null) {
       userName = "unknown";
     }
     return "Request{"
-            + "credential=" + credential
-            + ", userName=" + userName
-            + ", action=" + action
-            + ", now=" + now
-            + ", doorID=" + doorId
-            + ", closed=" + doorClosed
-            + ", authorized=" + authorized
-            + ", reasons=" + reasons
-            + "}";
+        + "credential=" + credential
+        + ", userName=" + userName
+        + ", action=" + action
+        + ", now=" + now
+        + ", doorID=" + doorId
+        + ", closed=" + doorClosed
+        + ", authorized=" + authorized
+        + ", reasons=" + reasons
+        + "}";
   }
 
+  // Convert the request response into a JSON object for API or frontend use
   public JSONObject answerToJson() {
     JSONObject json = new JSONObject();
     json.put("authorized", authorized);
@@ -75,31 +81,27 @@ public class RequestReader implements Request {
     return json;
   }
 
-  // see if the request is authorized and put this into the request, then send it to the door.
-  // if authorized, perform the action.
+  // Process the request: check authorization, then send request to door, log details
   public void process() {
     User user = DirectoryUserGroups.findUserByCredential(credential);
     Door door = DirectoryAreas.findDoorById(doorId);
-    assert door != null : "door " + doorId + " not found";
-    authorize(user, door);
-    // this sets the boolean authorize attribute of the request
-    door.processRequest(this);
-    // even if not authorized we process the request, so that if desired we could log all
-    // the requests made to the server as part of processing the request
-    doorClosed = door.isClosed();
+    assert door != null : "door " + doorId + " not found"; // Ensure door exists
+    authorize(user, door); // Check authorization for user and door
+    door.processRequest(this); // Send the request to be processed by the door
+    doorClosed = door.isClosed(); // Update door's closed state
   }
 
-  // the result is put into the request object plus, if not authorized, why not,
-  // only for testing
+  // Authorization check: validates the user's privileges and action
   private void authorize(User user, Door door) {
     if (user == null) {
       authorized = false;
-      addReason("user doesn't exists");
+      addReason("user doesn't exist"); // User not found
     } else {
       UserGroup userGroup = user.getUserGroup();
-      authorized = userGroup.canSendRequests(now) // when
-          && userGroup.canBeInSpaceAndDoAction(door.getToSpace(), action)
-          && userGroup.canBeInSpaceAndDoAction(door.getToSpace(), action); // where and what
+      // Check if the user group allows the action in the specified areas and time
+      authorized = userGroup.canSendRequests(now) // Validate request time
+          && userGroup.canBeInSpaceAndDoAction(door.getFromSpace(), action) // Validate origin space
+          && userGroup.canBeInSpaceAndDoAction(door.getToSpace(), action);   // Validate destination space
     }
   }
 }
