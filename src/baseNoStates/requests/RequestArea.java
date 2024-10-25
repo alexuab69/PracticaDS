@@ -51,8 +51,6 @@ public class RequestArea implements Request {
     // Add the JSONArray of requests to the main JSON object
     json.put("requestsDoors", jsonRequests);
 
-    // Add a placeholder field for future implementation
-    json.put("todo", "request areas not yet implemented");
     return json;
   }
 

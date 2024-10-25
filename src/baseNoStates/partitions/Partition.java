@@ -21,6 +21,11 @@ public class Partition extends Area {
 
   @Override
   public Area findAreaById(String id) {
+    // Check if the current partition has the same id as the one we are looking for
+    if (this.id.equals(id)) {
+      return this;
+    }
+    // Loop through each 'Area' object in the 'areas' collection
     for (Area area : areas) {
       if (area instanceof Partition partition) {
         Area foundArea = partition.findAreaById(id);
