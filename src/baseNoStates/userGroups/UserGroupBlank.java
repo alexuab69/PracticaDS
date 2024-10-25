@@ -10,10 +10,7 @@ public class UserGroupBlank extends UserGroup{
     super(role);
   }
 
-  @Override
-  public boolean canSendRequests(LocalDateTime now) {
-    return false;
-  }
+    public boolean canSendRequests(LocalDateTime now) {return false;}
   @Override
   public boolean canBeInSpaceAndDoAction(Area toSpace, String action) {
     return false;

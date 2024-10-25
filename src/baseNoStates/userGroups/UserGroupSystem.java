@@ -10,9 +10,8 @@ public class UserGroupSystem extends UserGroup {
   }
 
   @Override
-  public boolean canSendRequests(LocalDateTime now) {
-    return true;
-  }
+  public boolean canSendRequests(LocalDateTime now) { return true;}
+
   @Override
   public boolean canBeInSpaceAndDoAction(Area toSpace, String action) {
     return false;

@@ -2,10 +2,13 @@ package baseNoStates;
 
 import baseNoStates.userGroups.UserGroup;
 
+import java.time.LocalDateTime;
+
 public class User {
   private final String name;
   private final String credential;
   private final UserGroup userGroup;
+
 
   public User(String name, String credential, UserGroup userGroup) {
     this.name = name;
@@ -16,6 +19,7 @@ public class User {
   public String getCredential() {return credential;}
   public UserGroup getUserGroup() {return userGroup;}
   public String getName() {return name;}
+
 
   public void setUserGroup(UserGroup userGroup) {userGroup.setUsers(this);}
   public void setName(String name) {name = name;}

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public abstract class UserGroup {
   private final static ArrayList<User> users = new ArrayList<>();
   private String role = "";
+  protected Schedule schedule;
 
   public UserGroup(String role) {
     this.role = role;

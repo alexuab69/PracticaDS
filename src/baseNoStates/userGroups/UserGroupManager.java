@@ -4,36 +4,36 @@ import baseNoStates.partitions.Area;
 
 import java.time.LocalDateTime;
 import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class UserGroupManager extends UserGroup{
 
-  public UserGroupManager(String role) {
-    super(role);
-  }
+    public UserGroupManager(String role) {
+        super(role);
 
-  @Override
-  public boolean canSendRequests(LocalDateTime now) {
-    // Sept 1 2024
-    LocalDateTime firstDate = LocalDateTime.of(now.getYear(), 9, 1, 0, 0);
+        ArrayList<DayOfWeek> workingDays = new ArrayList<>();
+        workingDays.add(DayOfWeek.MONDAY);
+        workingDays.add(DayOfWeek.TUESDAY);
+        workingDays.add(DayOfWeek.WEDNESDAY);
+        workingDays.add(DayOfWeek.THURSDAY);
+        workingDays.add(DayOfWeek.FRIDAY);
+        workingDays.add(DayOfWeek.SATURDAY);
 
-    // Mar 1 2025
-    LocalDateTime finalDate = LocalDateTime.of(now.plusYears(1).getYear(), 3, 1, 0, 0);
+        // Step 2: Define the working hours
+        LocalTime startWorkingHour = LocalTime.of(8, 0);  // 08:00
+        LocalTime endWorkingHour = LocalTime.of(20, 0);    // 20:00
 
-    // Comprobar si 'now' está en días de lunes a sábado
-    DayOfWeek dayOfWeek = now.getDayOfWeek();
-    boolean isntSunday = (dayOfWeek != DayOfWeek.SUNDAY); // Excluye domingo
+        // Step 3: Define the start and end dates
+        LocalDateTime startDate = LocalDateTime.of(2024, 9, 1, 0, 0);  // September 1, 2024
+        LocalDateTime endDate = LocalDateTime.of(2025, 3, 1, 0, 0);    // March 1, 2025
 
-    // Comprobar si la hora está entre las 8:00 y las 20:00
-    int hour = now.getHour();
-    boolean workingHours = (hour >= 8 && hour < 20);
+        // Step 4: Create the Schedule instance
+        schedule = new Schedule(workingDays, startWorkingHour, endWorkingHour, startDate, endDate);
+    }
+    @Override
+    public boolean canSendRequests(LocalDateTime now) {return schedule.inRange(now);}
 
-    // Verificar si 'now' está dentro del rango de fechas, días laborables y horas laborales
-    return (now.isEqual(firstDate) || now.isAfter(firstDate)) &&
-        now.isBefore(finalDate) && isntSunday && workingHours;
-  }
-  @Override
-  public boolean canBeInSpaceAndDoAction(Area toSpace, String action) {
-    return true;
-  }
-
+    @Override
+    public boolean canBeInSpaceAndDoAction(Area toSpace, String action) {return true;}
 }
