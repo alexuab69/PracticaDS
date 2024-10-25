@@ -69,12 +69,13 @@ class Propped extends DoorState {
 
 class UnlockedShortly implements java\util.Observer {
     - now : LocalDateTime
-    + Locked(door : Door)
     + open()
     + close()
     + lock()
     + unlock()
     + unlockShortly()
+    + update(o : Observable, arg : Object)
+
 }
 
 DoorState <|-- Unlocked
