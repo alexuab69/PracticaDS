@@ -4,6 +4,8 @@ import baseNoStates.partitions.Area;
 
 import java.time.LocalDateTime;
 import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.EnumSet;
 
 public class UserGroupManager extends UserGroup{
@@ -12,16 +14,28 @@ public class UserGroupManager extends UserGroup{
 
     super(role);
 
-    // Set default values for Manager
-    // Sep. 1 this year to Mar. 1 next year
-    // week days + saturday, 8-20h
-    LocalDateTime firstDate = LocalDateTime.of(LocalDateTime.now().getYear(), 9, 1, 0, 0);
-    LocalDateTime finalDate = LocalDateTime.of(LocalDateTime.now().plusYears(1).getYear(), 3, 1, 0, 0);
-    setDateRange(firstDate, finalDate);
-    setWorkingDays(EnumSet.of(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
-        DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY));
-    setWorkingHours(8, 20);  // 8:00 AM - 8:00 PM
+    ArrayList<DayOfWeek> workingDays = new ArrayList<>();
+    workingDays.add(DayOfWeek.MONDAY);
+    workingDays.add(DayOfWeek.TUESDAY);
+    workingDays.add(DayOfWeek.WEDNESDAY);
+    workingDays.add(DayOfWeek.THURSDAY);
+    workingDays.add(DayOfWeek.FRIDAY);
+    workingDays.add(DayOfWeek.SATURDAY);
+
+    // Step 2: Define the working hours
+    LocalTime startWorkingHour = LocalTime.of(8, 0);  // 08:00
+    LocalTime endWorkingHour = LocalTime.of(20, 0);    // 20:00
+
+    // Step 3: Define the start and end dates
+    LocalDateTime startDate = LocalDateTime.of(2024, 9, 1, 0, 0);  // September 1, 2024
+    LocalDateTime endDate = LocalDateTime.of(2025, 3, 1, 0, 0);    // March 1, 2025
+
+    // Step 4: Create the Schedule instance
+    schedule = new Schedule(workingDays, startWorkingHour, endWorkingHour, startDate, endDate);
   }
+
+  @Override
+  public boolean canSendRequests(LocalDateTime now) { return schedule.inRange(now);}
 
   // all actions
   // all spaces

@@ -33,7 +33,9 @@ public class UserGroupEmployee extends UserGroup{
   }
 
   @Override
-  public boolean canSendRequests(LocalDateTime now) { return schedule.inRange(now);}
+  public boolean canSendRequests(LocalDateTime now) {
+    System.out.println(schedule.inRange(now));
+    return schedule.inRange(now);}
 
     @Override
   public boolean canBeInSpaceAndDoAction(Area toSpace, String action) {
