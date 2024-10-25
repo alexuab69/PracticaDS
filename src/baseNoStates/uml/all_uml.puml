@@ -51,6 +51,15 @@ Main -[hidden]down- Webserver
 
 package "UserGroups" {
 
+    class Schedule {
+        - startHour : int
+        - endHour : int
+        - workingDays : EnumSet<DayOfWeek>
+        + setWorkingHours(startHour : int, endHour : int)
+        + setWorkingDays(workingDays : EnumSet<DayOfWeek>)
+        + canSendRequests(now : LocalDateTime) : boolean
+    }
+
     class DirectoryUserGroups {
     - userGroups : ArrayList<UserGroup>
     + makeUserGroups()
@@ -99,6 +108,10 @@ package "UserGroups" {
 
 DirectoryUserGroups  -->  UserGroup : userGroups
 UserGroup  -->  User : users
+
+UserGroup --> Schedule : schedule
+
+
 
 package "Partitions" {
 
