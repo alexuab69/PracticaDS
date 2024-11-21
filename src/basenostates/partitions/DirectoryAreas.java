@@ -3,6 +3,8 @@ package basenostates.partitions;
 import basenostates.Door;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The DirectoryAreas class represents the directory of all areas and doors in a building structure.
@@ -10,6 +12,10 @@ import java.util.Arrays;
  * to find areas and doors by their ID.
  */
 public class DirectoryAreas {
+  private static final Logger logger = LoggerFactory.getLogger(DirectoryAreas.class);
+  // Logger instance
+
+
   private static Area rootArea;           // Root area representing the entire building structure
   private static ArrayList<Door> allDoors; // List to store all doors in the building
 
@@ -139,7 +145,7 @@ public class DirectoryAreas {
         return door;
       }
     }
-    System.out.println("door with id " + id + " not found");
+    logger.warn("Door with ID '{}' not found.", id);
     return null; // Returns null if door is not found
   }
 
@@ -148,7 +154,7 @@ public class DirectoryAreas {
    * returns an ArrayList of Door objects representing all doors in the building
    */
   public static ArrayList<Door> getAllDoors() {
-    System.out.println(allDoors);
+    logger.debug("Retrieving all doors. '{}' ", allDoors);
     return allDoors;
   }
 }

@@ -7,6 +7,9 @@ import basenostates.doorstates.Unlocked;
 import basenostates.partitions.Area;
 import basenostates.requests.RequestReader;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Represents a Door that connects two areas and has a state (e.g., locked, unlocked).
@@ -14,6 +17,8 @@ import org.json.JSONObject;
  * Extends the Area class.
  */
 public class Door extends Area {
+  private static final Logger logger = LoggerFactory.getLogger(Door.class); // Logger instance
+
   private final String id;           // Unique identifier for the door
   private DoorState state;           // Current state of the door
   private boolean closed;            // Indicates if the door is closed
@@ -82,7 +87,7 @@ public class Door extends Area {
       String action = request.getAction();
       doAction(action); // Perform the specified action on the door
     } else {
-      System.out.println("not authorized");
+      logger.warn("Unauthorized access attempt on door ID: {}", id);
     }
     request.setDoorStateName(getStateName()); // Update the request with the current door state
   }
@@ -106,7 +111,7 @@ public class Door extends Area {
         state.unlockShortly();
         break;
       default:
-        System.out.println("action not recognized");
+        logger.error("Action not recognized: {}", action);
     }
   }
 

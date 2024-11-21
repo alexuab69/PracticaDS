@@ -5,12 +5,15 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
 * Represents a user group for managers with specific work schedule and full access to all actions
 * in all spaces.
 */
 public class UserGroupManager extends UserGroup {
+  private static final Logger logger = LoggerFactory.getLogger(UserGroupManager.class);
 
   /**
   * Constructs a UserGroupManager with the specified role and predefined schedule.
@@ -40,7 +43,9 @@ public class UserGroupManager extends UserGroup {
 
   @Override
   public boolean canSendRequests(LocalDateTime now) {
-    return schedule.inRange(now);
+    boolean inRange = schedule.inRange(now);
+    logger.debug("Checking if current time {} is within schedule range: {}", now, inRange);
+    return inRange;
   }
 
   // all actions

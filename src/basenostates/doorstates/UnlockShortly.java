@@ -5,6 +5,8 @@ import basenostates.Door;
 import java.time.LocalDateTime;
 import java.util.Observable;
 import java.util.Observer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a door state where the door is unlocked for a short duration.
@@ -12,6 +14,8 @@ import java.util.Observer;
  * or the propped state (if open).
  */
 public class UnlockShortly extends DoorState implements Observer {
+  private static final Logger logger = LoggerFactory.getLogger(UnlockShortly.class);
+  // Logger instance
 
   private final LocalDateTime now;
   private final Clock timer;
@@ -34,9 +38,9 @@ public class UnlockShortly extends DoorState implements Observer {
     // if door is unlocked shortly, you can open it
     if (door.isClosed()) {
       door.setClosed(false);
-      System.out.println("Door opened");
+      logger.info("Door opened");
     } else {
-      System.out.println("Door is already open");
+      logger.info("Door is already open");
     }
   }
 
@@ -45,9 +49,9 @@ public class UnlockShortly extends DoorState implements Observer {
     // if door is unlocked shortly, you can close it
     if (!door.isClosed()) {
       door.setClosed(true);
-      System.out.println("Door closed");
+      logger.info("Door closed");
     } else {
-      System.out.println("Door is already closed");
+      logger.info("Door is already closed");
     }
   }
 
@@ -55,12 +59,11 @@ public class UnlockShortly extends DoorState implements Observer {
   public void lock() {
     // if door is open, then is propped
     if (!door.isClosed()) {
-      System.out.println("After 10 seconds, the door still open. Set the door as propped");
-      door.setState(new Propped(door, State.PROPPED));
+      logger.error("Tried to lock an opened door");
     } else {
       // if door is unlocked shortly, you can lock it
       door.setState(new Locked(door, State.LOCKED));
-      System.out.println("Door locked");
+      logger.info("Door locked");
     }
   }
 
@@ -68,13 +71,13 @@ public class UnlockShortly extends DoorState implements Observer {
   public void unlock() {
     // if door is unlocked shortly, you can unlock it
     door.setState(new Unlocked(door, State.UNLOCKED));
-    System.out.println("Door unlocked");
+    logger.info("Door unlocked");
   }
 
   @Override
   public void unlockShortly() {
     // if door is unlocked shortly, you can't unlock it shortly
-    System.out.println("Door is already unlocked shortly");
+    logger.warn("Tried to unlock shortly an already unlocked shortly door");
   }
 
   @Override
@@ -86,11 +89,12 @@ public class UnlockShortly extends DoorState implements Observer {
       if (now.plusSeconds(10).isBefore(time)) {
         timer.stop(); // stop the timer if 10 seconds have passed
         if (!door.isClosed()) {
-          System.out.println("After 10 seconds, the door still open. Set the door as propped");
+          logger.info("10 seconds have passed and the door is still open. "
+              + "Door state set to propped");
           door.setState(new Propped(door, State.PROPPED));
         } else {
           door.setState(new Locked(door, State.LOCKED));
-          System.out.println("Door locked");
+          logger.info("10 seconds have passed and the door is closed. Door locked");
         }
       }
       // do nothing

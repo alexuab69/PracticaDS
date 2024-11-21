@@ -1,12 +1,16 @@
 package basenostates.doorstates;
 
 import basenostates.Door;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents the "unlocked" state of a door, allowing it to be opened or closed
  * freely, and enabling it to transition to the locked state if closed.
  */
 public class Unlocked extends DoorState {
+  private static final Logger logger = LoggerFactory.getLogger(Unlocked.class); // Logger instance
+
   /**
    * Constructs an Unlocked state for the specified door.
    */
@@ -19,9 +23,9 @@ public class Unlocked extends DoorState {
     // if door is unlocked, you can open it
     if (door.isClosed()) {
       door.setClosed(false);
-      System.out.println("Door opened");
+      logger.info("Door opened.");
     } else {
-      System.out.println("Door is already open");
+      logger.info("Door is already opened.");
     }
   }
 
@@ -30,9 +34,9 @@ public class Unlocked extends DoorState {
     // if door is unlocked, you can close it
     if (!door.isClosed()) {
       door.setClosed(true);
-      System.out.println("Door closed");
+      logger.info("Door closed.");
     } else {
-      System.out.println("Door is already closed");
+      logger.info("Door is already closed");
     }
   }
 
@@ -41,23 +45,23 @@ public class Unlocked extends DoorState {
     // if door is unlocked, you can lock it
     // if door is open, can't lock it
     if (!door.isClosed()) {
-      System.out.println("Door is open, you can't lock it until it's closed");
+      logger.error("Door is open, you can't lock it until it's closed");
     } else {
       door.setState(new Locked(door, State.LOCKED));
-      System.out.println("Door locked");
+      logger.info("Door locked");
     }
   }
 
   @Override
   public void unlock() {
     // if door is unlocked, you can unlock it
-    System.out.println("Door is already unlocked");
+    logger.warn("Tried to unlock an already unlocked door");
   }
 
   @Override
   public void unlockShortly() {
     // if door is unlocked, it's not necessary to unlock it shortly
-    System.out.println("Door is already unlocked");
+    logger.info("Door is already unlocked, it's not necessary to unlock it shortly");
   }
 
 }

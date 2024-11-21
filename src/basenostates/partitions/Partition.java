@@ -3,11 +3,15 @@ package basenostates.partitions;
 import basenostates.Door;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents a partition which can contain other areas such as spaces or other partitions.
  */
 public class Partition extends Area {
+  private static final Logger logger = LoggerFactory.getLogger(Partition.class); // Logger instance
+
   private final String id;
   protected List<Area> areas;
 
@@ -53,8 +57,7 @@ public class Partition extends Area {
 
   /**
    * Gets the spaces contained within this partition.
-   *
-   * @return a list of spaces.
+   * returns a list of spaces.
    */
   public ArrayList<Space> getSpaces() {
     ArrayList<Space> spaces = new ArrayList<>();
@@ -72,7 +75,7 @@ public class Partition extends Area {
   public ArrayList<Door> getDoorsGivingAccess() {
     // Create a new ArrayList to store all doors that provide access
     ArrayList<Door> accessDoors = new ArrayList<>();
-    System.out.println("Getting doors of partition...");
+    logger.debug("Getting doors of partition...");
     // Loop through each 'Area' object in the 'areas' collection
     for (Area area : areas) {
       // Check if the area is an instance of 'Partition'

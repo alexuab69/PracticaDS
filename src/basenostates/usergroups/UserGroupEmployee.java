@@ -6,15 +6,20 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
 * Represents a user group for employees with specific work schedule and access permissions.
 */
 public class UserGroupEmployee extends UserGroup {
+  private static final Logger logger = LoggerFactory.getLogger(UserGroupEmployee.class);
+
   /**
   * Constructs a UserGroupEmployee with the specified role and predefined schedule.
   */
   public UserGroupEmployee(String role) {
+
     super(role); // Call to the superclass constructor to set the role
 
     ArrayList<DayOfWeek> workingDays = new ArrayList<>();
@@ -42,8 +47,9 @@ public class UserGroupEmployee extends UserGroup {
   // Method to check if the user can send requests based on the current time
   @Override
   public boolean canSendRequests(LocalDateTime now) {
-    System.out.println(schedule.inRange(now)); // Print the result of the schedule check
-    return schedule.inRange(now); // Return whether the current time is within the schedule range
+    boolean inRange = schedule.inRange(now);
+    logger.debug("Checking if current time {} is within schedule range: {}", now, inRange);
+    return inRange; // Return whether the current time is within the schedule range
   }
 
   // Method to check if the user can perform an action in a specific area

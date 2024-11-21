@@ -2,6 +2,8 @@ package basenostates.usergroups;
 
 import basenostates.User;
 import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The DirectoryUserGroups class manages all user groups and their associated users.
@@ -9,6 +11,7 @@ import java.util.ArrayList;
  * by their credentials.
  */
 public final class DirectoryUserGroups {
+  private static final Logger logger = LoggerFactory.getLogger(DirectoryUserGroups.class);
   private static final ArrayList<UserGroup> userGroups = new ArrayList<>();
   // List to store all user groups
 
@@ -58,7 +61,7 @@ public final class DirectoryUserGroups {
         return user;
       }
     }
-    System.out.println("user with credential " + credential + " not found");
+    logger.warn("User with credential {} not found.", credential);
     return null;
   }
 }
