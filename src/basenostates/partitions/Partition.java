@@ -72,7 +72,7 @@ public class Partition extends Area {
   public ArrayList<Door> getDoorsGivingAccess() {
     // Create a new ArrayList to store all doors that provide access
     ArrayList<Door> accessDoors = new ArrayList<>();
-
+    System.out.println("Getting doors of partition...");
     // Loop through each 'Area' object in the 'areas' collection
     for (Area area : areas) {
       // Check if the area is an instance of 'Partition'

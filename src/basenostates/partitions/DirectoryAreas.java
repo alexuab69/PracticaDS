@@ -31,7 +31,7 @@ public class DirectoryAreas {
                 allDoors.get(1)  // D2
             )
         ),
-        new Partition("ground floor",
+        new Partition("ground_floor",
             new Space("hall",
                 allDoors.get(2), // D3
                 allDoors.get(3)  // D4
@@ -43,7 +43,7 @@ public class DirectoryAreas {
                 allDoors.get(5)  // D6
             )
         ),
-        new Partition("floor 1",
+        new Partition("floor1",
             new Space("corridor",
                 allDoors.get(6) // D7
             ),
