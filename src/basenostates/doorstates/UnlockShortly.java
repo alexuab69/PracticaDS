@@ -14,13 +14,14 @@ import java.util.Observer;
 public class UnlockShortly extends DoorState implements Observer {
 
   private final LocalDateTime now;
-  private final Clock timer = new Clock(1); // updated every second
+  private final Clock timer;
 
   /**
    * Constructs an UnlockShortly state for the door.
    */
   public UnlockShortly(Door door, String stateName) {
     super(door, stateName); // save the actual time to compare it with the time of the timer
+    timer = Clock.getInstance();
     now = LocalDateTime.now();
     // start a timer of 10 seconds, after that, door will be locked again
     timer.start();

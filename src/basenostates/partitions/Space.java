@@ -38,4 +38,9 @@ public class Space extends Area {
   public ArrayList<Door> getDoors() {
     return doors;
   }
+
+  @Override
+  public ArrayList<Door> getDoorsGivingAccess() {
+    return doors;
+  }
 }

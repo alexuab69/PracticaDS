@@ -12,6 +12,7 @@ import java.util.TimerTask;
  * It extends the Observable class to provide an observer pattern implementation.
  */
 public class Clock extends Observable {
+  private static Clock instance = null;
   private LocalDateTime date;
   private final Timer timer;
   private final int period; // seconds
@@ -20,9 +21,23 @@ public class Clock extends Observable {
    * Constructs a Clock with a specific update period in seconds.
    * period the interval (in seconds) at which the clock notifies its observers.
    */
-  public Clock(int period) {
+  private Clock(int period) {
     this.period = period;
     timer = new Timer();
+  }
+
+  /**
+   * Returns the singleton instance of the Clock class. If the instance does not
+   * exist, it creates one.
+   * This method is thread-safe as it uses the synchronized keyword to ensure
+   * only one thread can initialize the instance at a time.
+   * return the singleton instance of the Clock.
+   */
+  public static synchronized Clock getInstance() {
+    if (instance == null) {
+      instance = new Clock(1);
+    }
+    return instance;
   }
 
   /**
