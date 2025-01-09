@@ -1,6 +1,8 @@
 package basenostates.partitions;
 
 import basenostates.Door;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 /**

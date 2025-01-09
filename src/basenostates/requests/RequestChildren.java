@@ -2,6 +2,7 @@ package basenostates.requests;
 
 import basenostates.Door;
 import basenostates.User;
+import basenostates.partitions.Area;
 import basenostates.partitions.DirectoryAreas;
 import basenostates.usergroups.DirectoryUserGroups;
 import basenostates.usergroups.UserGroup;
@@ -33,7 +34,7 @@ public class RequestChildren implements Request{
     }
 
     public void process() {
-        Area area = DirectoryAreas.getInstance().findAreaById(areaId);
+        Area area = DirectoryAreas.findAreaById(areaId);
         jsonTree = area.toJson(1);
     }
 }

@@ -1,6 +1,9 @@
 package basenostates.partitions;
 
 import basenostates.Door;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,8 +34,8 @@ public class Space extends Area {
     json.put("class", "space");
     json.put("id", id);
     JSONArray jsonDoors = new JSONArray();
-    for (Door d : doorsGivingAccess) {
-      jsonDoors.put(d.toJson());
+    for (Door d : getDoorsGivingAccess()) {
+      jsonDoors.put(d.toJson(1));
     }
     json.put("access_doors", jsonDoors);
     return json;
