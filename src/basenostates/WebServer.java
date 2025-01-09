@@ -2,6 +2,7 @@ package basenostates;
 
 import basenostates.requests.Request;
 import basenostates.requests.RequestArea;
+import basenostates.requests.RequestChildren;
 import basenostates.requests.RequestReader;
 import basenostates.requests.RequestRefresh;
 import java.io.BufferedReader;
@@ -122,9 +123,7 @@ public class WebServer {
           request = makeRequestArea(tokens);
           break;
         case "get_children":
-          logger.warn("Request get_children is not yet implemented.");
-          request = null;
-          System.exit(-1);
+          request = makeRequestChildren(tokens);
           break;
         default:
           logger.error("Unknown request: {}", tokens[0]);
@@ -150,6 +149,10 @@ public class WebServer {
       return new RequestArea(credential, action, dateTime, areaId);
     }
 
+    private RequestChildren makeRequestChildren(String[] tokens) {
+      String areaId = tokens[1];
+      return new RequestChildren(areaId);
+    }
     private String makeHeaderAnswer() {
       String answer = "";
       answer += "HTTP/1.0 200 OK\r\n";

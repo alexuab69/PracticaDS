@@ -128,10 +128,16 @@ public class DirectoryAreas {
   /**
    * Finds an area in the building by its unique ID.
    * id is the unique identifier of the area to find
-   * returns the Area with the specified ID, or null if no such area exists
+   * returns the Area with the specified ID, or null if no such area exists.
+   * If the ID is "ROOT", the root area representing the entire building structure is returned.
    */
   public static Area findAreaById(String id) {
-    return rootArea.findAreaById(id); // Returns an Area or null if not found
+    if(id.equals("ROOT")){
+      return rootArea;
+    }
+    else{
+      return rootArea.findAreaById(id); // an Area or null if not found
+    }
   }
 
   /**

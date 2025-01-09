@@ -7,6 +7,10 @@ import java.util.ArrayList;
  * This abstract class represents spaces and partitions.
  */
 public abstract class Area {
+  /**
+   * This method will be used to convert the area to a JSON object.
+   */
+  public abstract JSONObject toJson(int depth);
 
   /**
    * This method return the area's id.

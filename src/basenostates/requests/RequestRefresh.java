@@ -37,7 +37,7 @@ public class RequestRefresh implements Request {
   @Override
   public void process() {
     for (Door door : DirectoryAreas.getAllDoors()) {
-      jsonsDoors.add(door.toJson());
+      jsonsDoors.add(door.toJson(1));
     }
   }
 }

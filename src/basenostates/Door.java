@@ -129,7 +129,7 @@ public class Door extends Area {
    * Useful for APIs or frontend applications.
    * returns a JSONObject containing the door's ID, state, and closed status.
    */
-  public JSONObject toJson() {
+  public JSONObject toJson(int depth) {
     JSONObject json = new JSONObject();
     json.put("id", id);
     json.put("state", getStateName());

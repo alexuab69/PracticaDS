@@ -23,6 +23,26 @@ public class Partition extends Area {
     this.areas = List.of(areas);
   }
 
+  /**
+   * Converts the partition to a JSON object.
+   * the parameter is the depth of the JSON object to convert
+   */
+  public JSONObject toJson(int depth) {
+    // for depth=1 only the root and children,
+    // for recusive = all levels use Integer.MAX_VALUE
+    JSONObject json = new JSONObject();
+    json.put("class", "partition");
+    json.put("id", id);
+    JSONArray jsonAreas = new JSONArray();
+    if (depth > 0) {
+      for (Area a : areas) {
+        jsonAreas.put(a.toJson(depth - 1));
+      }
+      json.put("areas", jsonAreas);
+    }
+    return json;
+  }
+
   @Override
   public void createBuilding(Area... areas) {
     this.areas = List.of(areas);

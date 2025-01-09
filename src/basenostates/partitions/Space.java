@@ -22,6 +22,21 @@ public class Space extends Area {
     this.doors.addAll(Arrays.asList(doors));
   }
 
+  /**
+   * Converts the space to a JSON object.
+   * the parameter is the depth of the JSON object to convert
+   */
+  public JSONObject toJson(int depth) { // depth not used here
+    JSONObject json = new JSONObject();
+    json.put("class", "space");
+    json.put("id", id);
+    JSONArray jsonDoors = new JSONArray();
+    for (Door d : doorsGivingAccess) {
+      jsonDoors.put(d.toJson());
+    }
+    json.put("access_doors", jsonDoors);
+    return json;
+  }
 
   @Override
   public String getId() {
